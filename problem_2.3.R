@@ -1,27 +1,26 @@
+library(mvtnorm)
 #Random forest
 
 set.seed(1234)
 
 # creating constants in 0)
-n<-1000
-p<-10
-pi<-0.5
+n <- 1000
+p <- 10
+pi <- 0.5
 X.test = matrix(0, 101, p)
 X.test[,1] = seq(-2, 2, length.out = 101)
 
-#function generating data
-DGP<-function(n){
-  # X - design matrix 
-  library(mvtnorm)
+generate_data <- function(n) { 
+  
   Sigma <- diag(p)
   X <- rmvnorm(n, sigma = Sigma, method = "chol")
   
   # treatment variable W 
-  W<-rbinom(n=n,size = 1, prob = pi)
+  W <- rbinom(n=n,size = 1, prob = pi)
   
   # generate  outcome variable
-  eps<-rnorm(n, 0, 1)
-  Y<-pmax(0,X[,1])*W+X[,2]+pmax(0, X[,2])+eps
+  eps <- rnorm(n)
+  Y<-pmax(0, X[,1])*W+X[,2]+pmax(0, X[,2])+eps
   
   return(list(Y=Y,W=W,X=X))
 }
