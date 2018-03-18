@@ -2,6 +2,7 @@ library(mvtnorm)
 library(zeallot)
 library(hdm)
 library(balanceHD)
+library(pbapply)
 
 set.seed(1234)
 
@@ -21,13 +22,13 @@ generate_data <- function() {
   Sigma <- outer(1:p, 1:p, FUN=function(x, y) rho^(abs(x-y)))
   X <- rmvnorm(n, sigma = Sigma, method = "chol")
   
-  theta <- X %*% beta_W + rnorm(n)
-  W <- rbinom(n, 1, 1/(1+exp(theta)))
+#  theta <- X %*% beta_W + rnorm(n)
+#  W <- rbinom(n, 1, 1/(1+exp(theta)))
   
-  epsilon <- rnorm(n)
-  Y <- tau*W + X %*% beta_Y + epsilon
+#  epsilon <- rnorm(n)
+#  Y <- tau*W + X %*% beta_Y + epsilon
   
-  return(list(Y, X, W))
+#  return(list(Y, X, W))
 }
 
 estimate_effect <- function(data) {
@@ -56,14 +57,17 @@ simulation_instance <- function(place_holder) {
 }
 
 simulation <- function(iterations) {
-  Z <- matrix(0, nrow=iterations, ncol=3)
-  Z <- apply(Z, 1, simulation_instance)
+  Z <- matrix(0, nrow = iterations, ncol=3)
+  Z <- pbapply(Z, 1, simulation_instance)
   return(t(Z))
 }
 
 assess_simulation <- function() {
+  op <- pboptions(type = "timer")
   Z <- simulation(400)
+  pboptions(op)
   return(colMeans(Z))
 }
 
-main()
+
+assess_simulation()
