@@ -103,4 +103,3 @@ assess_simulation <- function() {
 }
 
 assess_simulation()
-
