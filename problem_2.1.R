@@ -61,7 +61,7 @@ estimate_effect <- function(data){
   res <- ate.glmnet(X, Y, W, alpha = 1, conf.level = 0.9, nfolds = 10, method = "separate",
                     lambda.choice = "lambda.min")
   
-  return(c(tau_if, tau_simple, res$tau, ci_simple, res$conf.int))
+  return(list(tau_if, tau_simple, res$tau, ci_simple, res$conf.int))
 }
 
 
