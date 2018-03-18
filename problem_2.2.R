@@ -22,13 +22,13 @@ generate_data <- function() {
   Sigma <- outer(1:p, 1:p, FUN=function(x, y) rho^(abs(x-y)))
   X <- rmvnorm(n, sigma = Sigma, method = "chol")
   
-#  theta <- X %*% beta_W + rnorm(n)
-#  W <- rbinom(n, 1, 1/(1+exp(theta)))
+  theta <- X %*% beta_W + rnorm(n)
+  W <- rbinom(n, 1, 1/(1+exp(theta)))
   
-#  epsilon <- rnorm(n)
-#  Y <- tau*W + X %*% beta_Y + epsilon
+  epsilon <- rnorm(n)
+  Y <- tau*W + X %*% beta_Y + epsilon
   
-#  return(list(Y, X, W))
+  return(list(Y = Y, X = X, W = W))
 }
 
 estimate_effect <- function(data) {
